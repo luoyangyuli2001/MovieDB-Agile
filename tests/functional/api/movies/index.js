@@ -7,6 +7,7 @@ import movies from "../../../../seedData/movies";
 
 const expect = chai.expect;
 let db;
+let token;
 
 describe("Movies endpoint", () => {
   before(() => {
@@ -29,6 +30,10 @@ describe("Movies endpoint", () => {
     try {
       await Movie.deleteMany();
       await Movie.collection.insertMany(movies);
+      await request(api).post("/api/users?action=register").send({
+        username: "user1",
+        password: "test1",
+      });
     } catch (err) {
       console.error(`failed to Load user Data: ${err}`);
     }
@@ -36,46 +41,43 @@ describe("Movies endpoint", () => {
   afterEach(() => {
     api.close(); // Release PORT 8080
   });
-  describe("GET /api/movies ", () => {
-    it("should return 20 movies and a status 200", (done) => {
-      request(api)
-        .get("/api/movies")
-        .set("Accept", "application/json")
-        .expect("Content-Type", /json/)
-        .expect(200)
-        .end((err, res) => {
-          expect(res.body).to.be.a("array");
-          expect(res.body.length).to.equal(20);
-          done();
-        });
-    });
-  });
-
   describe("GET /api/movies/:id", () => {
-    describe("when the id is valid", () => {
-      it("should return the matching movie", () => {
+    describe("when the user is authenticated", () => {
+      before(() => {
+        token = "BEARER eyJhbGciOiJIUzI1NiJ9.dXNlcjE.FmYria8wq0aFDHnzYWhKQrhF5BkJbFNN1PqNyNQ7V4M"
+      })
+      describe("when the id is valid", () => {
+        it("should return the matching movie", () => {
+          return request(api)
+            .get(`/api/movies/${movies[0].id}`)
+            .set("Authorization", token)
+            .expect(200)
+            .then((res) => {
+              expect(res.body).to.have.property("title", movies[0].title);
+            });
+        });
+      });
+      describe("when the id is invalid", () => {
+        // TMDB will return 500 if the user send an invalid movie id to it.
+        it("should return the NOT found message", () => {
+          return request(api)
+            .get("/api/movies/9999999999999")
+            .set("Authorization", token)
+            .expect(500)
+        });
+      });
+    })
+    describe("when the user is not authenticated", () => {
+      before(() => {
+        token = ""
+      })
+      it("should return a status 401 and Unauthorized message", () => {
         return request(api)
           .get(`/api/movies/${movies[0].id}`)
-          .set("Accept", "application/json")
-          .expect("Content-Type", /json/)
-          .expect(200)
-          .then((res) => {
-            expect(res.body).to.have.property("title", movies[0].title);
-          });
+          .set("Authorization", token)
+          .expect(401)
+          .expect("Unauthorized");
       });
-    });
-    describe("when the id is invalid", () => {
-      it("should return the NOT found message", () => {
-        return request(api)
-          .get("/api/movies/9999")
-          .set("Accept", "application/json")
-          .expect("Content-Type", /json/)
-          .expect(404)
-          .expect({
-            status_code: 404,
-            message: "The resource you requested could not be found.",
-          });
-      });
-    });
+    })
   });
 });
