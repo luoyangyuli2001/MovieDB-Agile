@@ -1,46 +1,38 @@
 import express from 'express';
 import asyncHandler from 'express-async-handler';
-import Review from './reviewModel'
+import { movieReviews } from '../movies/moviesData';
+import uniqid from 'uniqid';
 
 const router = express.Router(); 
 
 // Get movie reviews
-router.get('/movie/:id/reviews', asyncHandler(async (req, res) => {
+router.get('/:id/reviews', (req, res) => {
     const id = parseInt(req.params.id);
-    const movieReviews = await Review.find({movieId: id});
-    if(id){
-        res.status(200).json(movieReviews); 
+    if (movieReviews.id == id) {
+        res.status(200).json(movieReviews);
     } else {
         res.status(404).json({
             message: 'The resource you requested could not be found.',
             status_code: 404
         });
     }
-    
-}));
+});
 
 //Post a movie review
 router.post('/movie/:id/reviews/:username', asyncHandler(async (req, res) => {
     const id = parseInt(req.params.id);
     const userName = req.params.username;
-    const movieReviews = await Review.find({author: userName, movieId: id});
-    if (movieReviews.length === 0 || movieReviews === null){
-        req.body.id = new Date();
-        req.body.author = userName;
-        req.body.created_at = new Date();
-        req.body.updated_at = new Date();
-        Review.create(req.body);
-        res.status(201).json(req.body);
-    }
-    else if (movieReviews.length > 0) {
-        req.body.updated_at = new Date();
-        const result = await Review.updateOne({
-            movieId: req.params.id,
-        }, req.body);
-        if (result.matchedCount) {
-            res.status(200).json({ code: 200, msg: 'Review Updated Sucessfully' });
-        } else {
-            res.status(404).json({ code: 404, msg: 'Unable to Update Review' });
+    if (movieReviews.id == id) {
+        if (req.body.content) {
+            req.body.author = userName;
+            req.body.created_at = new Date();
+            req.body.updated_at = new Date();
+            req.body.id = uniqid();
+            movieReviews.results.push(req.body); //push the new review onto the list
+            res.status(201).json(req.body);
+        }
+        else {
+            res.status(403).json({ message: 'Invalid content.', status_code: 403 });
         }
     } else {
         res.status(404).json({

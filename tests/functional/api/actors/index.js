@@ -9,7 +9,7 @@ import actors from "../../../../seedData/actors";
 const expect = chai.expect;
 let db;
 
-describe("Actor endpoint", () => {
+describe("Actors endpoint", () => {
   before(() => {
     mongoose.connect(process.env.MONGO_DB, {
       useNewUrlParser: true,
