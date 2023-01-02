@@ -1,8 +1,14 @@
 import express from 'express';
 import asyncHandler from 'express-async-handler';
 import { getPersonMovies, getPerson, getPersonImages, getPopularPeople } from '../tmdb/tmdb-api';
+import actorModel from './actorModel';
 
 const router = express.Router(); 
+
+router.get('/', asyncHandler( async (req, res) => {
+  const actors = await actorModel.find();
+  res.status(200).json(actors);
+}));
 
 router.get('/popular', asyncHandler( async(req, res) => {
     const actors = await getPopularPeople();

@@ -39,7 +39,7 @@ describe("Genres endpoint", () => {
   });
   describe("GET /api/genres/local ", () => {
     it("should return 4 genres and a status 200", () => {
-      request(api)
+      return request(api)
         .get("/api/genres/local")
         .set("Accept", "application/json")
         .expect(200)
@@ -51,7 +51,7 @@ describe("Genres endpoint", () => {
   });
   describe("GET /api/genres/tmdb ", () => {
     it("should return a list of genres and a status 200", () => {
-      request(api)
+      return request(api)
         .get("/api/genres/tmdb")
         .set("Accept", "application/json")
         .expect(200)
