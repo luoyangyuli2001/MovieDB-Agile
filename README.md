@@ -14,12 +14,12 @@ Student Number: 20099902
 ### Genres
 + /api/genres/local | GET | Gets all genres from seedData
 + /api/genres/tmdb | GET | Gets all genres from tmdb
-### Movies
+### Movies(Auth)
 + /api/movies/:id | GET | Gets a single movie from tmdb
 + /api/movies/tmdb/upcoming/:page | GET | Get upcoming movies from tmdb based on page number
 + /api/movies/tmdb/topRated/:page | GET | Get top rated movies from tmdb based on page number
 + /api/movies/tmdb/movie/:id/images | GET | Get movie images from tmdb
-### Reviews
+### Reviews(Auth)
 + /api/reviews/movie/:id/reviews | GET | Gets a movie reviews
 + /api/reviews/movie/:id/reviews/:username | POST | posts or updates a review
 ### Users
