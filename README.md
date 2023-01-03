@@ -181,8 +181,8 @@ Code coverage report and Coveralls web service:
 + [![Coverage Status](https://coveralls.io/repos/gitlab/luoyangyuli2001/agile-assignment2/badge.svg?branch=main)](https://coveralls.io/gitlab/luoyangyuli2001/agile-assignment2?branch=main)
 
 ## Other related links
-gitlab: https://gitlab.com/luoyangyuli2001/agile-assignment2
-github: https://github.com/luoyangyuli2001/Agile-assignment2
-HEROKU Staging App: https://dashboard.heroku.com/apps/agile-assignment2-yl-cicd
-HEROKU Production App: https://dashboard.heroku.com/apps/agile-ca2-yl-production
-Coverall: https://coveralls.io/gitlab/luoyangyuli2001/agile-assignment2
++ gitlab: https://gitlab.com/luoyangyuli2001/agile-assignment2
++ github: https://github.com/luoyangyuli2001/Agile-assignment2
++ HEROKU Staging App: https://dashboard.heroku.com/apps/agile-assignment2-yl-cicd
++ HEROKU Production App: https://dashboard.heroku.com/apps/agile-ca2-yl-production
++ Coverall: https://coveralls.io/gitlab/luoyangyuli2001/agile-assignment2
