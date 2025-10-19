@@ -1,8 +1,5 @@
 # Assignment 2 - Agile Software Practice.
 ​
-Name: Luo Yang
-Student Number: 20099902
-​
 ## API endpoints.
 
 ### Actors
